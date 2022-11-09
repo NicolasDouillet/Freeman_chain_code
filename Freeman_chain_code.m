@@ -26,7 +26,7 @@ function [bound_img, X0, Code, bound_coord] = Freeman_chain_code(I, option_displ
 %
 % - bound_img : binary (0/1) image of the input image boundaries. size(bound_img) = size(I).
 %
-% - X0 : cell array of integer vectors of double, the boundaries initial pixels coordinates.
+% - X0 : integer vector of doubles, the boundaries initial pixels coordinates.
 %
 % - Code : cell array of integer vectors of double, the boundaries Freeman coding vectors.
 %
@@ -36,9 +36,14 @@ function [bound_img, X0, Code, bound_coord] = Freeman_chain_code(I, option_displ
 % Current known limitations
 %
 % - Only extract the shapes outer boundaries;
-% - Do not work on 'inverted' binary image (white background);
+% - Do not work on 'inverted' binary image (white background);  in this case, just compute I = 1 - my_binary_inverted_image;
 % - Do not work on images with shape(s) "touching" one of the image boundaries.
 
+
+if nargin < 2
+    
+   option_display = true;
+end
 
 % Copy the image for final display
 J = I;

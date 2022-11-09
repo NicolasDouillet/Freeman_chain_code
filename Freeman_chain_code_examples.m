@@ -1,18 +1,11 @@
 % Freeman_chain_code use examples
 
-% I = imread('nuages.jpg');
-I = imread('coins.png');
-% I = imread('Forme4.JPG');
-% I = imread('roue1_6_2.jpg');
-% I = imread('ruedabin.PNG');
-% I = imread('spirale1.jpg');
-% I = imread('spirale2.jpg');
-% I = imread('Spirale3.jpg');
-% I = imread('nimp4.jpg');
-% I = imread('etoile2.jpg');
-% I = imread('v_letter.png');
+img_name = {'coins.png','Forme4.JPG','roue1_6_2.jpg','ruedabin.PNG','spirale1.jpg','spirale2.jpg','Spirale3.jpg','nimp4.jpg','etoile2.jpg','v_letter.png'};
 
-if size(I,3) > 1
+
+I = imread(string(img_name(1)));
+
+if size(I,3) > 1   
     
     I = rgb2gray(I);
     
@@ -36,14 +29,14 @@ for k = 1:numel(bound_coord)
     
 end
 
-isequal(bound_img,bound_img2) % check -> ok
+isequal(bound_img,bound_img2) % check equals 1 / logical true -> ok
 
 
 % Example III : shape boundary retrieving by its index
 first_shape_img = zeros(size(I));
 first_shape_segmented_img = repmat(bound_img,[1 1 3]);
-shp_idx = 1;
-idx = sub2ind(size(first_shape_segmented_img),bound_coord{shp_idx}(2,:),bound_coord{shp_idx}(1,:),2*ones(size(bound_coord{shp_idx}(1,:))));
+shp_idx = 1; % /_!_\ shp_idx < number of shapes in your image /_!_\
+idx = sub2ind(size(first_shape_segmented_img),bound_coord{shp_idx}(2,:),bound_coord{shp_idx}(1,:),3*ones(size(bound_coord{shp_idx}(1,:))));
 first_shape_segmented_img(idx) = 0;
 
 idx2 = sub2ind(size(I),bound_coord{shp_idx}(2,:),bound_coord{shp_idx}(1,:));
