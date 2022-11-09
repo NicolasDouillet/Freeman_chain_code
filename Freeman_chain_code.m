@@ -43,6 +43,7 @@ function [bound_img, X0, Code, bound_coord] = Freeman_chain_code(I, option_displ
 if nargin < 2
     
    option_display = true;
+   
 end
 
 % Copy the image for final display
