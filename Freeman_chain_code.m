@@ -1,4 +1,4 @@
-function [bound_img, X0, Code, bound_coord] = Freeman_chain_code(I, option_display)
+function [bound_img, X0, Code, bound_coord, invert_img] = Freeman_chain_code(I, option_display)
 % Freeman_chain_code : function to extract the contour of a given shape using
 % Freeman chain code. For binary images only.
 %
@@ -32,22 +32,32 @@ function [bound_img, X0, Code, bound_coord] = Freeman_chain_code(I, option_displ
 %
 % - bound_coord : cell array of integer vectors of double, the boundaries pixels coordinates.
 %
+% - invert_img : either logical, true/false or numeric 1/0; boolean for the image inverted status.
 %
-% Current known limitations
+%
+% Current known limitation
 %
 % - Only extract the shapes outer boundaries;
-% - Do not work on 'inverted' binary image (white background);  in this case, just compute I = 1 - my_binary_inverted_image;
-% - Do not work on images with shape(s) "touching" one of the image boundaries.
 
 
-if nargin < 2
-    
-   option_display = true;
-   
+if nargin < 2    
+   option_display = true;   
 end
 
-% Copy the image for final display
+% Copy the source image for final display
 J = I;
+
+
+% Dealing with inverted binary images (defined as images with a majority of 1 on the exterior rows and columns)
+S = size(I);
+invert_img = false;
+contour_sum = sum(I(:,1)) + sum(I(:,end)) + sum(I(1,:)) + sum(I(end,:)) - I(1,1) - I(1,end) - I(end,1) - I(end,end);
+
+if contour_sum / (sum(2*S)-4) > 0.5   
+    invert_img = true;
+    I = ~I;    
+end
+
 
 % Freeman code directions definition
 % In a n8 pixel neighborhood
@@ -64,7 +74,6 @@ prv_dir = @(d)mod(d-2,8) + 1;       % previous direction
 opp_dir = @(d)mod(d+2,8) + 1;       % opposite direction - 1
 
 % Look for first white pixel
-S = size(I);
 f = find(I,1,'first');
 s = 1; % shape index number
 
@@ -86,7 +95,7 @@ while f % ~isempty(f)
     I(row_idx0,col_idx0) = 0;         % to enter the loop
     
     
-    while ~I(row_idx1,col_idx1)
+    while ~row_idx1 || row_idx1 > S(1) || ~col_idx1 || col_idx1 > S(2) || ~I(row_idx1,col_idx1)
         
         dir0 = prv_dir(dir0);
         row_idx1 = row_idx0 + move_index(2,dir0); % 2nd point coordinates
@@ -110,7 +119,7 @@ while f % ~isempty(f)
         dir0 = opp_dir(dir);
         I(row_idx2,col_idx2) = 0; % to enter the loop
         
-        while ~I(row_idx1,col_idx1)
+        while ~row_idx1 || row_idx1 > S(1) || ~col_idx1 || col_idx1 > S(2) || ~I(row_idx1,col_idx1)
             
             dir0 = prv_dir(dir0);
             
@@ -129,7 +138,7 @@ while f % ~isempty(f)
         
         i = i + 1;
         
-    end
+    end        
         
     bound_coord_s = repmat([col_idx0;row_idx0],[1, numel(Code_s)]);
     bound_coord_s = circshift(bound_coord_s + cumsum(move_index(:,Code_s(1:end)),2),1,2);        
@@ -145,7 +154,12 @@ while f % ~isempty(f)
     f = find(I,1,'first');
     s = s + 1;
     
-end % Freeman_chain_code
+end
+
+
+if invert_img    
+    bound_img = ~bound_img;    
+end
 
 
 % Freeman contour display
@@ -168,23 +182,29 @@ end % Freeman_chain_code
 % shut_off_binary_shape_from_its_contour subfunction
 function [I_out] = shut_off_binary_shape_from_its_contour(I_in, bound_coord)
 
-I_out = I_in;
+
+shp_bin_mask = zeros(size(I_in));
 
 % By rows processing
 row_min_idx = min(bound_coord(:,2));
 row_max_idx = max(bound_coord(:,2));
-
 bound_coord = sortrows(bound_coord);
 
 for i = row_min_idx:row_max_idx
     
     row_bin_idx = bound_coord(:,2) == i;
     row_segments_col_idx = bound_coord(row_bin_idx,1);        
-    
+            
     % "Shut off" the row segments                  
-    I_out(i,row_segments_col_idx(1):row_segments_col_idx(end)) = 0;    
+    shp_bin_mask(i,row_segments_col_idx(1):row_segments_col_idx(end)) = 1;            
         
 end
+
+I_out = I_in - shp_bin_mask;
+I_out(I_out < 0) = 0;
+
+% shp_ftge = I_in & shp_bin_mask;
+% inner_shps = ones(size(I_in)) & (~shp_ftge);
 
 
 end % shut_down_shape_from_contour
