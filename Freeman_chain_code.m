@@ -143,7 +143,9 @@ while f % ~isempty(f)
     bound_coord_s = repmat([col_idx0;row_idx0],[1, numel(Code_s)]);
     bound_coord_s = circshift(bound_coord_s + cumsum(move_index(:,Code_s(1:end)),2),1,2);        
         
-    I = shut_off_binary_shape_from_its_contour(I,bound_coord_s');    
+    
+    
+    I = shut_off_binary_shape_from_its_contour(I,bound_coord_s');
     
     bound_coord(s) = {bound_coord_s};
     clear bound_coord_s;
@@ -202,9 +204,6 @@ end
 
 I_out = I_in - shp_bin_mask;
 I_out(I_out < 0) = 0;
-
-% shp_ftge = I_in & shp_bin_mask;
-% inner_shps = ones(size(I_in)) & (~shp_ftge);
 
 
 end % shut_down_shape_from_contour

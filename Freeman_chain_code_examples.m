@@ -1,14 +1,9 @@
 % Freeman_chain_code use examples
 
-img_name = {'bw_art.png','cropped_clouds.jpg','coins.png','Forme4.JPG','gear.jpg','ruedabin.PNG','v_letter.png'};
+img_name = {'overcleaned_bin_rice.png','bw_art.png','cropped_clouds.png','bw_coins.png','concave_shape.png',...
+            'gear.png','complex_gear.png','v_letter.png','matrice.png','disks_cloud.png'};
 
-I = imread(string(img_name(1)));
-
-if size(I,3) > 1       
-    I = rgb2gray(I);    
-end
-    
-I = imbinarize(I);
+I = imread(string(img_name(1))); % Choose your image number between 1 and 10 here
 
 
 % Example I : how to execute Freeman_chain_code
