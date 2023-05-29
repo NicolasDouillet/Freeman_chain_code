@@ -2,7 +2,7 @@ function [bound_img, X0, Code, bound_coord, invert_img] = Freeman_chain_code(I, 
 % Freeman_chain_code : function to extract the contour of a given shape using
 % Freeman chain code. For binary images only.
 %
-% Author & support : nicolas.douillet (at) free.fr, 2005-2022.
+% Author & support : nicolas.douillet (at) free.fr, 2005-2023.
 %
 % 
 % Reference
@@ -141,9 +141,7 @@ while f % ~isempty(f)
     end        
         
     bound_coord_s = repmat([col_idx0;row_idx0],[1, numel(Code_s)]);
-    bound_coord_s = circshift(bound_coord_s + cumsum(move_index(:,Code_s(1:end)),2),1,2);        
-        
-    
+    bound_coord_s = circshift(bound_coord_s + cumsum(move_index(:,Code_s(1:end)),2),1,2);                
     
     I = shut_off_binary_shape_from_its_contour(I,bound_coord_s');
     
@@ -182,28 +180,45 @@ end % Freeman_chain_code
 
 
 % shut_off_binary_shape_from_its_contour subfunction
-function [I_out] = shut_off_binary_shape_from_its_contour(I_in, bound_coord)
+function I_out = shut_off_binary_shape_from_its_contour(I_in, bound_coord)
 
 
-shp_bin_mask = zeros(size(I_in));
+% I By rows processing
+shp_row_bin_mask = ones(size(I_in));
 
-% By rows processing
 row_min_idx = min(bound_coord(:,2));
 row_max_idx = max(bound_coord(:,2));
-bound_coord = sortrows(bound_coord);
+bound_coord_rows = sortrows(bound_coord);
 
 for i = row_min_idx:row_max_idx
     
-    row_bin_idx = bound_coord(:,2) == i;
-    row_segments_col_idx = bound_coord(row_bin_idx,1);        
+    row_bin_idx = bound_coord_rows(:,2) == i;
+    row_segments_col_idx = bound_coord_rows(row_bin_idx,1);        
             
     % "Shut off" the row segments                  
-    shp_bin_mask(i,row_segments_col_idx(1):row_segments_col_idx(end)) = 1;            
+    shp_row_bin_mask(i,row_segments_col_idx(1):row_segments_col_idx(end)) = 0;            
         
 end
 
-I_out = I_in - shp_bin_mask;
-I_out(I_out < 0) = 0;
+% II By columns processing
+shp_col_bin_mask = ones(size(I_in));
+
+col_min_idx = min(bound_coord(:,1));
+col_max_idx = max(bound_coord(:,1));
+bound_coord_cols = sortrows(bound_coord,2);
+
+for j = col_min_idx:col_max_idx
+    
+    col_bin_idx = bound_coord_cols(:,1) == j;
+    col_segments_row_idx = bound_coord_cols(col_bin_idx,2);        
+            
+    % "Shut off" the col segments                  
+    shp_col_bin_mask(col_segments_row_idx(1):col_segments_row_idx(end),j) = 0;            
+        
+end
+
+shp_bin_mask = shp_row_bin_mask | shp_col_bin_mask;
+I_out = I_in .* shp_bin_mask;
 
 
 end % shut_down_shape_from_contour
