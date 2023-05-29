@@ -3,7 +3,7 @@
 img_name = {'overcleaned_bin_rice.png','bw_art.png','cropped_clouds.png','bw_coins.png','concave_shape.png',...
             'gear.png','complex_gear.png','v_letter.png','matrice.png','disks_cloud.png'};
 
-I = imread(string(img_name(2))); % Choose your image number between 1 and 10 here
+I = imread(string(img_name(3))); % Choose your image number between 1 and 10 here
 
 
 % Example I : how to execute Freeman_chain_code
