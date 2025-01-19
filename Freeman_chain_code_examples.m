@@ -11,8 +11,10 @@ I = imread(string(img_name(fid))); % Choose your image number between 1 and 10 h
 
 
 % Example I : how to execute Freeman_chain_code
-[bound_img,X0,Code,bound_coord,invert_img] = Freeman_chain_code(I,true);
+[bound_img,X0,freeman_code,bound_coord,invert_img] = Freeman_chain_code(I,true);
 
+nb_shapes = numel(freeman_code);
+fprintf('%d shapes detected in this image\n',nb_shapes);
 
 % Example II : how to rebuild the boundary image from the boundary coordinates vector
 bound_img2 = zeros(size(I));
@@ -20,8 +22,8 @@ bound_img2 = zeros(size(I));
 for k = 1:numel(bound_coord)
     
     bound_coord_k = cell2mat(bound_coord(k));
-    idx = sub2ind(size(I),bound_coord_k(2,:),bound_coord_k(1,:));
-    bound_img2(idx) = 1;
+    id = sub2ind(size(I),bound_coord_k(2,:),bound_coord_k(1,:));
+    bound_img2(id) = 1;
     
 end
 
@@ -29,26 +31,58 @@ if invert_img
     bound_img2 = ~bound_img2;    
 end
         
-isequal(bound_img,bound_img2) % check equals 1 / logical true -> ok
+fprintf('Is rebuild contour equal to origin contour ? => %d\n',isequal(bound_img,bound_img2)) % check equals 1 / logical true -> ok
 
 
-% Example III : shape boundary retrieving by its index
-first_shape_segmented_img = repmat(bound_img,[1 1 3]);
-shp_idx = 1; % shp_idx < number of shapes in your image
-idx = sub2ind(size(first_shape_segmented_img),bound_coord{shp_idx}(2,:),bound_coord{shp_idx}(1,:),3*ones(size(bound_coord{shp_idx}(1,:))));
-idx2 = sub2ind(size(I),bound_coord{shp_idx}(2,:),bound_coord{shp_idx}(1,:));
+% Example III : shapes labelling
+shapes_segmented_img = repmat(bound_img,[1 1 3]);
 
-first_shape_img = zeros(size(I));
-first_shape_segmented_img(idx) = 0;
-first_shape_img(idx2) = 1;
+colorarray = [0 1 1;  % cyan
+              1 0 1;  % magenta
+              1 1 0;  % yellow
+              0 1 0;  % green
+              1 0 0;  % red
+              0 0 1;  % blue
+              1 1 1]; % white
+          
+colorarray = permute(colorarray,[1 3 2]);          
 
-if invert_img    
-    first_shape_segmented_img(idx) = 1;
-    first_shape_img = ~first_shape_img;    
+
+for shp_id = 1:nb_shapes % shp_id < number of shapes in your image
+    
+    color_id = 1 + mod(shp_id-1,size(colorarray,1));
+    pix_color = find(colorarray(color_id,1,:) == 0);
+    
+    switch numel(pix_color)        
+            
+        case 1
+            
+            id = sub2ind(size(shapes_segmented_img),bound_coord{shp_id}(2,:),bound_coord{shp_id}(1,:),pix_color*ones(size(bound_coord{shp_id}(1,:))));
+            shapes_segmented_img(id) = 0;
+            
+        case 2
+            
+            id1 = sub2ind(size(shapes_segmented_img),bound_coord{shp_id}(2,:),bound_coord{shp_id}(1,:),pix_color(1)*ones(size(bound_coord{shp_id}(1,:))));
+            id2 = sub2ind(size(shapes_segmented_img),bound_coord{shp_id}(2,:),bound_coord{shp_id}(1,:),pix_color(2)*ones(size(bound_coord{shp_id}(1,:))));
+            
+            shapes_segmented_img(id1) = 0;
+            shapes_segmented_img(id2) = 0;
+            
+        otherwise % case 0 | white color
+            
+    end                                
+    
+end
+
+if invert_img
+    
+    shapes_segmented_img(id) = 1;
+    first_shape_img = ~first_shape_img;
+    
 end
 
 
 figure;
-% image(first_shape_img);
-image(first_shape_segmented_img);
-title(['Shape #',num2str(shp_idx),' (indexing order)']);
+image(shapes_segmented_img);
+axis equal, axis off;
+title([num2str(nb_shapes),' shapes detected and labelled'],'FontSize',16);
