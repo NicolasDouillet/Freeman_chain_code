@@ -1,17 +1,17 @@
 function [bound_img, X0, Code, bound_coord, invert_img] = Freeman_chain_code(I, option_display)
 % Freeman_chain_code : function to extract the contour of a given shape using
-% Freeman chain code. For binary images only.
+% Freeman chain code. Works on binary images only, size(I,3) = 1.
 %
-% Author & support : nicolas.douillet (at) free.fr, 2005-2023.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2005-2025.
 %
 % 
-% Reference
+%%% Reference
 % 
 % Freeman H, Computer Processing of Line-Drawing Images,
 % ACM Computing Surveys, Vol. 6, No.1, 1974, pp57-97.
 %
 %
-% Inputs
+%%% Input arguments
 %
 %
 % - I : binary (0/1) image where 0 pixels correspond to the black
@@ -21,7 +21,7 @@ function [bound_img, X0, Code, bound_coord, invert_img] = Freeman_chain_code(I, 
 % - option_display : either logical, true/false or numeric 1/0.
 %
 %
-% Outputs
+%%% Output arguments
 %
 %
 % - bound_img : binary (0/1) image of the input image boundaries. size(bound_img) = size(I).
@@ -32,10 +32,10 @@ function [bound_img, X0, Code, bound_coord, invert_img] = Freeman_chain_code(I, 
 %
 % - bound_coord : cell array of integer vectors of double, the boundaries pixels coordinates.
 %
-% - invert_img : either logical, true/false or numeric 1/0; boolean for the image inverted status.
+% - invert_img : either logical, true*/false or numeric 1*/0; boolean for the image inverted status.
 %
 %
-% Current known limitation
+%%% Known limitation
 %
 % - Only extract the shapes outer boundaries;
 

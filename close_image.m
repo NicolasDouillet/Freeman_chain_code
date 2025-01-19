@@ -1,9 +1,9 @@
 function J = close_image(I, se, r)
 %
-% Author and support : nicolas.douillet (at) free.fr, 2022.
+%%% Author : nicolas.douillet (at) free.fr, 2022-2024.
 %
 %
-% Inputs
+%%% Inputs
 %
 % - I : binary image.
 %
@@ -12,7 +12,7 @@ function J = close_image(I, se, r)
 % - r : radius. Positive integer.
 %
 %
-% Output
+%%% Output
 %
 % J : binary image.
 
@@ -24,4 +24,4 @@ D = dilate_image(I, se, r);
 J = erode_image(D, se, r);
 
 
-end % open_image
+end % close_image

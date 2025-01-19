@@ -3,14 +3,14 @@ function J = image_bw_remove(I)
 % from the image processing toolbox. It can be used to get at once every
 % boundaries in the image.
 %
-% Author and support : nicolas.douillet (at) free.fr, 2022.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2022-2025.
 %
 %
-% Inputs
+%%% Inputs
 %
 % - I : binary image.
 %
-% Output
+%%% Output
 %
 % J : binary image.
 

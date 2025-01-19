@@ -1,4 +1,6 @@
 % test imoperations
+%
+%%% Author : nicolas.douillet9 (at) gmail.com, 2005-2025.
 
 clear all, close all, clc;
 

@@ -1,6 +1,6 @@
 function J = open_image(I, se, r)
 %
-% Author and support : nicolas.douillet (at) free.fr, 2022.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2022-2025.
 %
 %
 % Inputs
