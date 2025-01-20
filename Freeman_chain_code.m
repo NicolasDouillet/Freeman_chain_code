@@ -1,5 +1,5 @@
 function [bound_img, X0, Code, bound_coord, invert_img] = Freeman_chain_code(I, option_display)
-% Freeman_chain_code : function to extract the contour of a given shape using
+%% Freeman_chain_code : function to extract the contour of a given shape using
 % Freeman chain code. Works on binary images only, size(I,3) = 1.
 %
 %%% Author : nicolas.douillet9 (at) gmail.com, 2005-2025.
@@ -40,10 +40,15 @@ function [bound_img, X0, Code, bound_coord, invert_img] = Freeman_chain_code(I, 
 % - Only extract the shapes outer boundaries;
 
 
+%% Input parsing
 if nargin < 2    
-   option_display = true;   
+    
+   option_display = true;
+   
 end
 
+
+%% Body
 % Copy the source image for final display
 J = I;
 
@@ -162,7 +167,7 @@ if invert_img
 end
 
 
-% Freeman contour display
+%% Freeman contour display
 if option_display
     
     figure;
@@ -179,7 +184,7 @@ end
 end % Freeman_chain_code
 
 
-% shut_off_binary_shape_from_its_contour subfunction
+%% shut_off_binary_shape_from_its_contour subfunction
 function I_out = shut_off_binary_shape_from_its_contour(I_in, bound_coord)
 
 
@@ -218,7 +223,7 @@ for j = col_min_idx:col_max_idx
 end
 
 shp_bin_mask = shp_row_bin_mask | shp_col_bin_mask;
-I_out = I_in .* shp_bin_mask;
+I_out = I_in & shp_bin_mask;
 
 
 end % shut_down_shape_from_contour

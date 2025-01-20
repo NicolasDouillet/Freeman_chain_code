@@ -31,7 +31,7 @@ if invert_img
     bound_img2 = ~bound_img2;    
 end
         
-fprintf('Is rebuild contour equal to origin contour ? => %d\n',isequal(bound_img,bound_img2)) % check equals 1 / logical true -> ok
+% fprintf('Is rebuild contour equal to origin contour ? => %d\n',isequal(bound_img,bound_img2)) % check equals 1 / logical true -> ok
 
 
 % Example III : shapes labelling
