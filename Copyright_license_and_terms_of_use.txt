@@ -1,0 +1,28 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    BW IMAGE PROCESSING SPARING TOOLS     %
+%				           %
+%   COPYRIGHT, LICENSE AND TERMS OF USE    %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+All the code included in this toolbox is the result of some of my own work started in 2005 improved in 2020-2025, and going on for further versions.
+
+
+This toolbox and its content is free of use and redistribution on all the following conditions that :
+
+- SELLING THIS WHOLE TOOLBOX OR EVEN PARTS OF IT IS STRICLY PROHIBITED; 
+
+- This license file must be included as well as each function header must be preserved without any modification;
+
+- Modifications of any kind are done under your own and unique responsability;
+
+- I do not provide any warrantee on the correctness of these algorithms and functions (even if they all have been have been independently tested);
+
+- Binary images used for tests are free of rights;
+
+- Downloading and using this toolbox or just part of it assumes you to have read, accepted and agreed with all the previous conditions of this license, without any exception.
+
+
+Author : Nicolas Douillet
+Contact : nicolas.douillet9 (at) gmail.com
+License version : 01 / 20 / 2025.
